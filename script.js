@@ -14,8 +14,28 @@ const observer = new IntersectionObserver(
 );
 
 elements.forEach(element => observer.observe(element));
-document.addEventListener("click", () => {
-  const music = document.getElementById("bgMusic");
-  music.volume = 0.3; // 30%
-  music.play();
-}, { once: true });
+
+/* ===== Botón de música ===== */
+const music = document.getElementById("bgMusic");
+const musicBtn = document.getElementById("musicBtn");
+
+if (music && musicBtn) {
+  music.volume = 0.3;
+
+  musicBtn.addEventListener("click", () => {
+    if (music.paused) {
+      music.play()
+        .then(() => {
+          musicBtn.textContent = "❚❚";
+          musicBtn.classList.add("playing");
+        })
+        .catch(error => {
+          console.log("No se pudo reproducir el audio:", error);
+        });
+    } else {
+      music.pause();
+      musicBtn.textContent = "♫";
+      musicBtn.classList.remove("playing");
+    }
+  });
+}
